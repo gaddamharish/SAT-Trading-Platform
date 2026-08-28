@@ -1,0 +1,1 @@
+{"name":"sat-trading-platform","version":"0.1.0","private":true,"scripts":{"test":"node --test","lint":"node --check src/sat/index.js","start":"node src/sat/index.js"},"engines":{"node":">=20"}}
