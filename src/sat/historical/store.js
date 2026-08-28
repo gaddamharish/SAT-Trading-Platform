@@ -1,0 +1,3 @@
+const fs=require('node:fs');const path=require('node:path');
+class HistoricalStore{constructor(file=path.join(process.cwd(),'data','historical.jsonl')){this.file=file;fs.mkdirSync(path.dirname(file),{recursive:true});}append(row){fs.appendFileSync(this.file,JSON.stringify(row)+'\n');return row;}query({symbol,start,end,limit=5000}={}){if(!fs.existsSync(this.file))return [];return fs.readFileSync(this.file,'utf8').split('\n').filter(Boolean).map(JSON.parse).filter(r=>(!symbol||r.symbol===symbol)&&(!start||r.timestamp>=start)&&(!end||r.timestamp<=end)).slice(-limit);}}
+module.exports={HistoricalStore};
