@@ -1,0 +1,5 @@
+function sma(values,n){if(!Array.isArray(values)||values.length<n)return null;return values.slice(-n).reduce((a,b)=>a+b,0)/n;}
+function ema(values,n){if(!Array.isArray(values)||values.length<n)return null;let e=values.slice(0,n).reduce((a,b)=>a+b,0)/n;const k=2/(n+1);for(const v of values.slice(n))e=v*k+e*(1-k);return e;}
+function deriveFeatures({closes=[],vwap=null,pcr=null,oiChangePct=null,ivChangePct=null}){const last=closes.at(-1),e20=ema(closes,20),e50=ema(closes,50),avg20=sma(closes,20);return {last,ema20:e20,ema50:e50,sma20:avg20,vwapBias:Number.isFinite(vwap)&&Number.isFinite(last)?last>=vwap?'ABOVE':'BELOW':null,momentum:Number.isFinite(last)&&Number.isFinite(avg20)?last-avg20:null,pcr,oiChangePct,ivChangePct};}
+function classifyRegime(f){if(!f||!Number.isFinite(f.last))return 'UNKNOWN';if(Number.isFinite(f.ema20)&&Number.isFinite(f.ema50)&&f.ema20>f.ema50&&f.last>f.ema20)return 'BULL_TREND';if(Number.isFinite(f.ema20)&&Number.isFinite(f.ema50)&&f.ema20<f.ema50&&f.last<f.ema20)return 'BEAR_TREND';return 'RANGE';}
+module.exports={sma,ema,deriveFeatures,classifyRegime};
