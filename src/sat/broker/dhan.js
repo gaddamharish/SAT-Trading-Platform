@@ -1,0 +1,2 @@
+class DhanAdapter{constructor(client){this.client=client;}async getQuote(symbol){if(!this.client?.getQuote)throw new Error('DHAN_CLIENT_NOT_CONFIGURED');return this.client.getQuote(symbol);}async getPositions(){if(!this.client?.getPositions)throw new Error('DHAN_CLIENT_NOT_CONFIGURED');return this.client.getPositions();}async placeOrder(){throw new Error('AUTONOMOUS_ORDERING_DISABLED');}}
+module.exports={DhanAdapter};
