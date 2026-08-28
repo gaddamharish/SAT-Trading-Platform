@@ -1,0 +1,5 @@
+const test=require('node:test');const assert=require('node:assert/strict');const {deriveFeatures,classifyRegime}=require('../src/sat/intelligence/features');const {optionChainMetrics,greeksFromQuote}=require('../src/sat/intelligence/derivatives');const {rankOpportunities}=require('../src/sat/intelligence/opportunities');
+test('feature engine derives bull trend',()=>{const closes=Array.from({length:60},(_,i)=>100+i);const f=deriveFeatures({closes,vwap:120});assert.equal(classifyRegime(f),'BULL_TREND');});
+test('derivatives metrics compute PCR',()=>{const m=optionChainMetrics([{callOI:100,putOI:150,callOIChange:10,putOIChange:20}]);assert.equal(m.pcr,1.5);});
+test('greeks return finite values',()=>{const g=greeksFromQuote({spot:25000,strike:25000,iv:.2,timeYears:30/365,type:'CE'});assert.ok(Number.isFinite(g.delta));assert.ok(Number.isFinite(g.gamma));});
+test('opportunities rank by evidence score',()=>{const r=rankOpportunities([{id:'a',confidence:1,technical:1,derivatives:1,historical:1,liquidity:1,risk:0},{id:'b',confidence:.5,technical:.5,derivatives:.5,historical:.5,liquidity:.5,risk:1}]);assert.equal(r[0].id,'a');});
